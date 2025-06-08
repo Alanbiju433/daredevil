@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proposal to Bintu</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <h1>Will You Be Mine, Bintu?</h1>
+        <p>A Romantic Proposal Website</p>
+        <nav>
+            <a href="#" data-page="about">About</a> |
+            <a href="#" data-page="story">Our Story</a> |
+            <a href="#" data-page="gallery">Gallery</a> |
+            <a href="#" data-page="response">Your Response</a>
+        </nav>
+    </header>
+    <div id="heart-container" style="text-align:center; margin-top: 50px; cursor: pointer;">
+        <div id="heart" style="font-size: 100px; color: red;">&#10084;</div>
+    </div>
+    <main id="content">
+        <section id="about" class="page-section">
+            <h2>About</h2>
+            <p>This is a romantic proposal website created for Bintu.</p>
+            <p>Welcome to this special place where love stories come alive.</p>
+        </section>
+
+        <section id="story" class="page-section" style="display:none;">
+            <h2>Michael's Story</h2>
+            <p>Some love stories are built on mutual affection, but some remain quietly woven into the heart of one.</p>
+            <p>From the moment Michael saw Bintu at Vijaya’s College in Kottarakara, Kerala, he knew she was special. They studied side by side, their shared passion for nursing filling their days with discussions, laughter, and encouragement. To Bintu, he was a friend, a constant presence in her journey. But to Michael, she was something more—someone who unknowingly held his heart in her hands.</p>
+            <p>He cherished every moment, every smile, every conversation that felt like a lifeline. Yet, his love remained unspoken, tucked away behind kindness and quiet devotion.</p>
+            <p>Now, as life moves forward, his feelings remain—a testament to the silent, unwavering love that exists even when it is not returned.</p>
+        </section>
+
+        <section id="gallery" class="page-section" style="display:none;">
+            <h2>Gallery</h2>
+            <div class="gallery-images">
+                <img src="images/friend.jpg" alt="Sweet moment 1" />
+                <img src="images/friend1.jpg" alt="Sweet moment 2" />
+                <img src="images/friend 3.jpg" alt="Sweet moment 3" />
+            </div>
+        </section>
+
+        <section id="response" class="page-section" style="display:none;">
+            <h2>Your Response</h2>
+            <form id="rsvp-form">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required />
+
+                <label for="response">Will you say yes?</label>
+                <select id="response" name="response" required>
+                    <option value="">Select an option</option>
+                    <option value="yes">Yes, I will!</option>
+                    <option value="no">No, sorry.</option>
+                    <option value="maybe">Maybe, need time.</option>
+                </select>
+
+                <label for="message">Message (optional):</label>
+                <textarea id="message" name="message" rows="4"></textarea>
+
+                <button type="submit">Send Response</button>
+            </form>
+            <div id="form-message"></div>
+        </section>
+    </main>
+    <audio id="background-music" src="BTS - Serendipity Full Length Edition.mp3" loop></audio>
+    <script src="script.js"></script>
+</body>
+</html>

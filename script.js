@@ -1,32 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.querySelectorAll('nav a[data-page]');
+    const nextButton = document.getElementById('next-button');
     const sections = document.querySelectorAll('.page-section');
     const heart = document.getElementById('heart');
     const backgroundMusic = document.getElementById('background-music');
     const rsvpForm = document.getElementById('rsvp-form');
     const formMessage = document.getElementById('form-message');
 
-    // Function to show the selected section and hide others
-    function showSection(page) {
-        sections.forEach(section => {
-            if (section.id === page) {
-                section.style.display = 'block';
-            } else {
-                section.style.display = 'none';
-            }
+    let currentIndex = 0;
+
+    // Create message viewer container (hidden by default)
+    const messageViewer = document.createElement('div');
+    messageViewer.id = 'message-viewer';
+    messageViewer.style.position = 'fixed';
+    messageViewer.style.top = '10%';
+    messageViewer.style.left = '10%';
+    messageViewer.style.width = '80%';
+    messageViewer.style.height = '80%';
+    messageViewer.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+    messageViewer.style.border = '2px solid #ccc';
+    messageViewer.style.padding = '20px';
+    messageViewer.style.overflowY = 'auto';
+    messageViewer.style.zIndex = '1000';
+    messageViewer.style.display = 'none';
+    messageViewer.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+    document.body.appendChild(messageViewer);
+
+    // Function to show the current section and hide others
+    function showCurrentSection() {
+        sections.forEach((section, index) => {
+            section.style.display = index === currentIndex ? 'block' : 'none';
         });
     }
 
-    // Initialize by showing the About section
-    showSection('about');
+    // Initialize by showing the first section
+    showCurrentSection();
 
-    // Navigation link click handler
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = link.getAttribute('data-page');
-            showSection(page);
-        });
+    // Next button click handler
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % sections.length;
+        showCurrentSection();
     });
 
     // Heart click event: play music and alert
@@ -43,6 +55,37 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundMusic.play();
         }
     }, { once: true });
+
+    // Function to load saved messages from localStorage and display
+    function loadSavedMessages() {
+        const messages = JSON.parse(localStorage.getItem('rsvpMessages') || '[]');
+        if (messages.length === 0) {
+            messageViewer.innerHTML = '<p>No saved messages.</p>';
+            return;
+        }
+        let html = '<h2>Saved RSVP Messages</h2><ul>';
+        messages.forEach((msg, index) => {
+            html += `<li><strong>${msg.name}</strong> (${msg.response}): ${msg.message || '(No message)'}</li>`;
+        });
+        html += '</ul>';
+        messageViewer.innerHTML = html;
+    }
+
+    // Toggle message viewer visibility on Ctrl key press
+    let ctrlPressed = false;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Control' && !ctrlPressed) {
+            ctrlPressed = true;
+            loadSavedMessages();
+            messageViewer.style.display = 'block';
+        }
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'Control') {
+            ctrlPressed = false;
+            messageViewer.style.display = 'none';
+        }
+    });
 
     // RSVP form submission handler
     if (rsvpForm) {
@@ -61,6 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 formMessage.style.color = 'red';
                 return;
             }
+
+            // Save message locally
+            const savedMessages = JSON.parse(localStorage.getItem('rsvpMessages') || '[]');
+            savedMessages.push(formData);
+            localStorage.setItem('rsvpMessages', JSON.stringify(savedMessages));
 
             try {
                 const res = await fetch('http://localhost:3000/send-message', {
